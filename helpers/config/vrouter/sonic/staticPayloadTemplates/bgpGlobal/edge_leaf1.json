@@ -1,52 +1,6 @@
 {
   "sonic-bgp-global:BGP_GLOBALS": {
     "BGP_GLOBALS_LIST": [
-          {
-            "vrf_name": "default",
-            "router_id": "10.94.1.1",
-            "local_asn": 65201,
-            "as_path_mp_as_set": true,
-            "keepalive": 1,
-            "holdtime": 3
-          }
-        ]
-      },
-    "BGP_GLOBALS_AF": {
-      "BGP_GLOBALS_AF_LIST": [
-        {
-          "vrf_name": "default",
-          "afi_safi": "ipv4",
-          "max_ebgp_paths": 256,
-          "max_ibgp_paths": 256
-        },
-        {
-          "vrf_name": "default",
-          "afi_safi": "ipv6",
-          "max_ebgp_paths": 256,
-          "max_ibgp_paths": 256
-        }
-      ]
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  "sonic-bgp-global:BGP_GLOBALS": {
-    "BGP_GLOBALS_LIST": [
       {
         "vrf_name": "default",
         "router_id": "10.94.1.1",

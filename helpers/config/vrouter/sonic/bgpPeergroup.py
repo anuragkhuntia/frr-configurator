@@ -66,8 +66,6 @@ def main():
     
     # Call GET method to fetch the configuration
     bgp_config.get_config('edge_leaf1')
-    #bgp_config.post_config('edge_leaf1')
-    # bgp_config.get_config('edge_leaf1')
 
 
 if __name__ == "__main__":

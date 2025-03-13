@@ -71,7 +71,7 @@ def remove_loopback_os(ip):
 
 def main():
     # Example usage - replace with actual IP and AS number
-    ip = "10.40.21.10"
+    # ip = "10.40.21.10"
 
     # Add loopback via subprocess
     add_loopback_subprocess(ip)

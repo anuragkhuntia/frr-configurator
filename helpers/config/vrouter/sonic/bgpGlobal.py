@@ -41,7 +41,7 @@ class BgpGlobal:
             
             headers = {'Content-Type': 'application/yang-data+json'}
             
-            print(f"Sending PUT request to {url} with data: {json_data}")  # Debugging
+            print(f"Sending POST request to {url} with data: {json_data}")  # Debugging
             
             response = requests.post(url, auth=requests.auth.HTTPBasicAuth(self.username, self.password),
                                     headers=headers, data=json.dumps(json_data), verify=False)
@@ -61,8 +61,6 @@ def main():
     # Create an instance of the BgpPeergroup class
     bgp_global = BgpGlobal(username='admin', password='npci@123')
     
-    # Call GET method to fetch the configuration
-    bgp_global.get_config('edge_leaf1')
     bgp_global.post_config('edge_leaf1')
     # bgp_config.get_config('edge_leaf1')
 
