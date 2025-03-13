@@ -1,8 +1,24 @@
 # this script is for reading and creating BGP GLOBAL configuration
 
-import json, csv, os, sys, requests
+import json
+import csv
+import os
+import sys
+import requests
+import logging
+
 sys.path.append("../../../")
 from common.readCsv import get_ip_for_hostname, read_json_for_hostname
+
+# Configure logging
+logging.basicConfig(
+    format='{"timestamp":"%(asctime)s","log_level":"%(levelname)s","message":"%(message)s","app":"%(name)s"}',
+    level=logging.INFO,
+    datefmt='%Y-%m-%dT%H:%M:%S.000Z',
+)
+
+logger = logging.getLogger("BgpGlobal")
+
 
 class BgpGlobal:
     def __init__(self, username, password):
@@ -14,57 +30,67 @@ class BgpGlobal:
         # GET request to fetch the configuration
         try:
             ip = get_ip_for_hostname(host)
+            if not ip:
+                logger.error(f"Failed to retrieve IP for hostname {host}")
+                return
+
             url = f'https://{ip}/restconf/data/sonic-bgp-global:sonic-bgp-global'
             response = requests.get(url, auth=requests.auth.HTTPBasicAuth(self.username, self.password), verify=False)
+
             # Check for successful response
             if response.status_code == 200:
-                print("GET Request Successful:")
-                print(response.text)
+                logger.info("GET request successful", extra={"response": response.text})
+                return response.text
             else:
-                print(f"Failed GET request with status code {response.status_code}")
-                print(response.text)
+                logger.error(
+                    f"Failed GET request with status code {response.status_code}",
+                    extra={"response": response.text}
+                )
         except requests.exceptions.RequestException as e:
-            print(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
 
     def post_config(self, host):
-        # PUT request to update the configuration
+        # POST request to update the configuration
         try:
             ip = get_ip_for_hostname(host)
-            if ip is None:
-                print(f"Error: No IP found for hostname {host}")
+            if not ip:
+                logger.error(f"Error: No IP found for hostname {host}")
                 return
-            
+
             url = f'https://{ip}/restconf/data/sonic-bgp-global:sonic-bgp-global'
-            json_data = read_json_for_hostname(host,'bgpGlobal') # host and path
-            
-            if json_data is None:
-                print(f"Error: No JSON configuration found for {host}")
+            json_data = read_json_for_hostname(host, 'bgpGlobal')
+
+            if not json_data:
+                logger.error(f"Error: No JSON configuration found for {host}")
                 return
-            
+
             headers = {'Content-Type': 'application/yang-data+json'}
-            
-            print(f"Sending POST request to {url} with data: {json_data}")  # Debugging
-            
-            response = requests.post(url, auth=requests.auth.HTTPBasicAuth(self.username, self.password),
-                                    headers=headers, data=json.dumps(json_data), verify=False)
-            
+
+            logger.info(f"Sending POST request to {url} with data: {json.dumps(json_data, indent=2)}")
+
+            response = requests.post(
+                url, auth=requests.auth.HTTPBasicAuth(self.username, self.password),
+                headers=headers, data=json.dumps(json_data), verify=False
+            )
+
             if response.status_code == 200:
-                print("PUT Request Successful:")
-                print(response.text)
+                logger.info("POST request successful", extra={"response": response.text})
             else:
-                print(f"Failed POST request with status code {response.status_code}")
-                print(f"Response body: {response.text}")
+                logger.error(
+                    f"Failed POST request with status code {response.status_code}",
+                    extra={"response": response.text}
+                )
         except requests.exceptions.RequestException as e:
-            print(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
+
 
 def main():
-    print("In main")
+    logger.info("Starting BGP Global configuration script")
 
-    # Create an instance of the BgpPeergroup class
+    # Create an instance of the BgpGlobal class
     bgp_global = BgpGlobal(username='admin', password='npci@123')
-    
-    bgp_global.post_config('edge_leaf1')
-    # bgp_config.get_config('edge_leaf1')
+
+    bgp_global.get_config('edge_leaf1')
 
 
 if __name__ == "__main__":
