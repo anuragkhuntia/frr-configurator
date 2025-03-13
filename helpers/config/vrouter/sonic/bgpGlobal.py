@@ -1,3 +1,5 @@
+# this script is for reading and creating BGP GLOBAL configuration
+
 import json, csv, os, sys, requests
 sys.path.append("../../../")
 from common.readCsv import get_ip_for_hostname, read_json_for_hostname

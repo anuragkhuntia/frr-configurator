@@ -1,3 +1,5 @@
+# this script is for fetching and creating BGP PEER GROUP configuration
+
 import requests
 import json, csv, os,sys
 sys.path.append("../../../")
