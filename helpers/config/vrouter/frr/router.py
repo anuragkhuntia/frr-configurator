@@ -16,11 +16,15 @@ my_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, my_path + '/../../../../')
 
 
-def add_loopback_subprocess(ip):
+def add_loopback_subprocess(ip,as_num):
     commands = f"""
     configure terminal
     interface lo
     ip address {ip}/32
+    exit
+    router bgp {as_num}
+    address-family ipv4 unicast
+    network {ip}/32
     end
     write memory
     end
@@ -37,11 +41,15 @@ def add_loopback_subprocess(ip):
         logging.exception("Exception occurred while updating FRR config")
 
 
-def add_loopback_os(ip):
+def add_loopback_os(ip, as_num):
     commands = (
         f'vtysh -c "configure terminal" '
         f'-c "interface lo" '
         f'-c "ip address {ip}/32" '
+        f'-c "exit" '
+        f'-c "router bgp {as_num}" '
+        f'-c "address-family ipv4 unicast" '
+        f'-c "network {ip}/32" '
         f'-c "end" '
         f'-c "write memory" '
         f'-c "end" '
@@ -53,11 +61,15 @@ def add_loopback_os(ip):
         logging.exception(f"Exception occurred while adding loopback {ip} to OS")
 
 
-def remove_loopback_os(ip):
+def remove_loopback_os(ip, as_num):
     commands = (
         f'vtysh -c "configure terminal" '
         f'-c "interface lo" '
         f'-c "no ip address {ip}/32" '
+        f'-c "exit" '
+        f'-c "router bgp {as_num}" '
+        f'-c "address-family ipv4 unicast" '
+        f'-c "no network {ip}/32" '
         f'-c "end" '
         f'-c "write memory" '
         f'-c "end" '
@@ -72,9 +84,10 @@ def remove_loopback_os(ip):
 def main():
     # Example usage - replace with actual IP and AS number
     # ip = "10.40.21.10"
+    # as_num = "6453
 
     # Add loopback via subprocess
-    add_loopback_subprocess(ip)
+    add_loopback_subprocess(ip, as_num)
 
     # Add loopback via OS command
     #add_loopback_os(ip)
