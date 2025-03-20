@@ -3,8 +3,8 @@ import datetime
 
 # Define payload data
 payload = {
-    'username': 'admin',
-    'password': 'npci@123',
+    'username': 'env.user'
+    'password': 'env.pass'
     'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=10)  # 10 hour expiry
 }
 

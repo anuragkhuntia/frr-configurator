@@ -91,7 +91,7 @@ def main():
     logger.info("Starting BGP Peergroup configuration script")
 
     # Create an instance of the BgpPeergroup class
-    bgp_config = BgpPeergroup(username='admin', password='npci@123')
+    bgp_config = BgpPeergroup(username='env.user', password='env.pass')
 
     # Call GET method to fetch the configuration
     bgp_config.get_config('edge_leaf1')
