@@ -138,3 +138,14 @@ def check_ingress_pod_health(ingress_pod_ip, ingress_host, ingress_ports_list):
     check the app is giving a successful response --> RV Start here.
     '''
     return healthy
+
+def check_haproxy_pod_health(namespace="ingress-nginx"):
+
+    v1 = client.CoreV1Api()
+    try:
+        ingress_pods = get_kube_ingress_pods(ingress_namespace)
+        print(ingress_pods)
+    except Exception as e:
+        logging.exception(e)
+
+        
