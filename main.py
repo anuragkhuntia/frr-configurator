@@ -2,7 +2,6 @@ import os
 import sys
 import json
 from helpers.config.orchestrator.kube.liveapps import get_kube_svc, get_my_ingress_pod_ip, get_kube_app_with_ingress_all, get_kube_proxy_info, check_haproxy_pod_health
-from helpers.config.orchestrator.kube.events import 
 
 parent_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir)
