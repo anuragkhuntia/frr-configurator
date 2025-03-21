@@ -139,14 +139,43 @@ def check_ingress_pod_health(ingress_pod_ip, ingress_host, ingress_ports_list):
     '''
     return healthy
 
-def check_haproxy_pod_health(namespace="ingress-nginx"):
+def check_haproxy_pod_health(namespace="ingress-haproxy"):
 
     v1 = client.CoreV1Api()
     try:
-        ingress_namespace = ingress_class.metadata.annotations["meta.helm.sh/release-namespace"]
-        ingress_pods = get_kube_ingress_pods(ingress_namespace)
+        ingress_pods = get_kube_ingress_pods(namespace)
         print(ingress_pods)
     except Exception as e:
         logging.exception(e)
+    v1 = client.CoreV1Api()
+    
+    try:
+        # List the pods in the provided namespace (adjust label selector if necessary)
+        pods = v1.list_namespaced_pod(namespace, label_selector="app=haproxy-ingress-controller")
+
+        if not pods.items:
+            print(f"No HAProxy Ingress Controller pods found in namespace {namespace}.")
+            return
+        
+        # Iterate through each pod and check its health
+        for pod in pods.items:
+            print(f"Checking pod: {pod.metadata.name}")
+            
+            # Check the pod's status (readiness/liveness status)
+            pod_status = pod.status.conditions
+            is_healthy = False
+            
+            for condition in pod_status:
+                if condition.type == "Ready" and condition.status == "True":
+                    is_healthy = True
+                    break
+            
+            if is_healthy:
+                print(f"Pod {pod.metadata.name} is healthy!")
+            else:
+                print(f"Pod {pod.metadata.name} is not healthy!")
+    
+    except ApiException as e:
+        print(f"Exception when calling Kubernetes API: {e}")
 
         
