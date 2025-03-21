@@ -64,5 +64,7 @@ print("if my kube-proxy pod on current node is healthy, advertise the Cluster IP
 #print("{}\n".format(json.dumps(app_ingresses)))
 #print("{}\n".format(json.dumps(node_kube_proxy_details)))
 print("{}\n".format(json.dumps(node_ingress_details)))
+print(check_haproxy_pod_health())
+
 #print("{}\n".format(json.dumps(l7_ingress_services_to_expose)))
 #print("{}\n".format(json.dumps(l4_kube_proxy_services_to_expose)))
