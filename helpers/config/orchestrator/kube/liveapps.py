@@ -143,7 +143,8 @@ def check_haproxy_pod_health(namespace="ingress-nginx"):
 
     v1 = client.CoreV1Api()
     try:
-        ingress_pods = get_kube_ingress_pods(namespace)
+        ingress_namespace = ingress_class.metadata.annotations["meta.helm.sh/release-namespace"]
+        ingress_pods = get_kube_ingress_pods(ingress_namespace)
         print(ingress_pods)
     except Exception as e:
         logging.exception(e)
