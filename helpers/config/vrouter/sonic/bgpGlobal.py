@@ -88,7 +88,7 @@ def main():
     logger.info("Starting BGP Global configuration script")
 
     # Create an instance of the BgpGlobal class
-    bgp_global = BgpGlobal(username='env.user', password='env.pass')
+    bgp_global = BgpGlobal(username=os.environ['user'], password=os.environ['pass'])
 
     bgp_global.get_config('edge_leaf1')
 
